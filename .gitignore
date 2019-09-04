@@ -11,7 +11,7 @@ out/
 apache*
 
 # lib
-lib/
+# lib/
 
 # web
 # web/
