@@ -74,14 +74,7 @@ public class PictureMasterServlet extends HttpServlet {
                         }
                     }
                 }
-//                for (FileItem item : items) {
-//                    if (item.isFormField()) {
-//                        String name = item.getFieldName();
-//                    } else {
-//                        String longFileName = item.getName();
-//
-//                    }
-//                }
+
             } catch (Exception e) {
                 request.setAttribute("message", "Error:" + e.getMessage());
                 e.printStackTrace();
