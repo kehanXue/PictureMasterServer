@@ -1,5 +1,9 @@
 package com.picturemaster;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,11 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
  * Servlet implementation class PictureMasterServlet
@@ -39,6 +38,17 @@ public class PictureMasterServlet extends HttpServlet {
 
         if (ServletFileUpload.isMultipartContent(request)) {
 
+
+            DiskFileItemFactory factory = new DiskFileItemFactory();
+            factory.setSizeThreshold(MEMORY_THRESHOLD);
+            factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
+
+            ServletFileUpload fileUpload = new ServletFileUpload(factory);
+            fileUpload.setFileSizeMax(MAX_FILE_SIZE);
+            fileUpload.setSizeMax(MAX_REQUEST_SIZE);
+            fileUpload.setHeaderEncoding("UTF-8");
+
+
             String savePath = this.getServletContext().getRealPath("/WEB-INF/upload");
             String tempPath = this.getServletContext().getRealPath("/WEB-INF/temp");
 
@@ -48,25 +58,31 @@ public class PictureMasterServlet extends HttpServlet {
             }
 
             try {
-                DiskFileItemFactory factory = new DiskFileItemFactory();
-                factory.setSizeThreshold(MEMORY_THRESHOLD);
-                factory.setRepository(new File(System.getProperty("java.io.tempdir")));
-
-
-                ServletFileUpload fileUpload = new ServletFileUpload(factory);
-                fileUpload.setFileSizeMax(MAX_FILE_SIZE);
-                fileUpload.setSizeMax(MAX_REQUEST_SIZE);
-
                 List<FileItem> items = fileUpload.parseRequest(request);
-                for (FileItem item : items) {
-                    if (item.isFormField()) {
-                        String name = item.getFieldName();
-                    } else {
-                        String longFileName = item.getName();
 
+                if (items != null && items.size() > 0) {
+                    for (FileItem item : items) {
+                        if (!item.isFormField()) {
+                            String fileName = new File(item.getName()).getName();
+                            String filePath = savePath;
+                            File storeFile = new File(filePath);
+
+                            System.out.println(filePath);
+                            item.write(storeFile);
+                            request.setAttribute("message", "Successfully");
+                        }
                     }
                 }
+//                for (FileItem item : items) {
+//                    if (item.isFormField()) {
+//                        String name = item.getFieldName();
+//                    } else {
+//                        String longFileName = item.getName();
+//
+//                    }
+//                }
             } catch (Exception e) {
+                request.setAttribute("message", "Error:" + e.getMessage());
                 e.printStackTrace();
             }
         } else {
@@ -76,5 +92,7 @@ public class PictureMasterServlet extends HttpServlet {
             return;
         }
 
+        request.getServletContext().getRequestDispatcher("/message.jsp").forward(request, response);
     }
+
 }
