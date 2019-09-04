@@ -48,10 +48,7 @@ public class PictureMasterServlet extends HttpServlet {
             fileUpload.setSizeMax(MAX_REQUEST_SIZE);
             fileUpload.setHeaderEncoding("UTF-8");
 
-
-            String savePath = this.getServletContext().getRealPath("/WEB-INF/upload");
             String tempPath = this.getServletContext().getRealPath("/WEB-INF/temp");
-
             File tempFile = new File(tempPath);
             if (!tempFile.exists()) {
                 tempFile.mkdir();
@@ -61,23 +58,45 @@ public class PictureMasterServlet extends HttpServlet {
                 List<FileItem> items = fileUpload.parseRequest(request);
 
                 if (items != null && items.size() > 0) {
+
+                    String convert_type = new String("");
+                    for (FileItem item : items) {
+
+                        if (item.isFormField() && item.getFieldName().equals("convert_type")) {
+                            System.out.println("type param: " + item.getFieldName());
+                            convert_type = item.getString();
+                        }
+                    }
+
                     for (FileItem item : items) {
                         if (!item.isFormField()) {
 
-                            String fileName = new File(item.getName()).getName();
-                            String filePath = "/home/kehan/android-workspace/PictureMasterServer/models/CartoonGAN-Test-Pytorch-Torch/test_img" + File.separator + fileName;
-                            File storeFile = new File(filePath);
-                            item.write(storeFile);
-                            ExecState execState = AiPictureConvertor.runCartoonGANHayao();
+                            ExecState execState = ExecState.START;
+                            if (convert_type.equals("ESRGAN") ||
+                                    convert_type.equals("CartoonGAN_Hayao") ||
+                                    convert_type.equals("CartoonGAN_Hosoda")) {
 
-                            request.setAttribute("message", execState.toString());
+                                if (convert_type.equals("ESRGAN")) {
+                                    execState = AiPictureConvertor.runESRGAN(item);
+                                }
+                                if (convert_type.equals("CartoonGAN_Hayao")) {
+                                    execState = AiPictureConvertor.runCartoonGANHayao(item);
+                                }
+                                if (convert_type.equals("CartoonGAN_Hosoda")) {
+                                    execState = AiPictureConvertor.runCartoonGANHosoda(item);
+                                }
+                                request.setAttribute("message", execState.toString());
+                            } else {
+
+                                request.setAttribute("message", "Wrong Input Convert Type");
+                            }
                         }
                     }
                 }
 
-            } catch (Exception e) {
-                request.setAttribute("message", "Error:" + e.getMessage());
-                e.printStackTrace();
+            } catch (Exception ex) {
+                request.setAttribute("message", "Error:" + ex.getMessage());
+                ex.printStackTrace();
             }
         } else {
             PrintWriter printWriter = response.getWriter();
