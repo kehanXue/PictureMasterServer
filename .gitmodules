@@ -1,0 +1,6 @@
+[submodule "models/ESRGAN"]
+	path = models/ESRGAN
+	url = git@github.com:xinntao/ESRGAN.git
+[submodule "models/CartoonGAN-Test-Pytorch-Torch"]
+	path = models/CartoonGAN-Test-Pytorch-Torch
+	url = git@github.com:Yijunmaverick/CartoonGAN-Test-Pytorch-Torch.git

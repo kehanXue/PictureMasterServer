@@ -1,0 +1,17 @@
+# Default ignored files
+/workspace.xml
+
+# IDEA
+*.idea
+
+# Build output
+out/
+
+# Tomcat
+apache*
+
+# lib
+lib/
+
+# web
+web/
