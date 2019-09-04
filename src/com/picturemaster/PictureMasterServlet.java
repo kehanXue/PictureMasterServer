@@ -63,10 +63,12 @@ public class PictureMasterServlet extends HttpServlet {
                     for (FileItem item : items) {
 
                         if (item.isFormField() && item.getFieldName().equals("convert_type")) {
-                            System.out.println("type param: " + item.getFieldName());
+                            System.out.println("type param: " + item.getString());
                             convert_type = item.getString();
                         }
                     }
+
+                    AiPictureConvertor.runCleanOldImgs();
 
                     for (FileItem item : items) {
                         if (!item.isFormField()) {
