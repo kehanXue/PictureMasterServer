@@ -63,13 +63,14 @@ public class PictureMasterServlet extends HttpServlet {
                 if (items != null && items.size() > 0) {
                     for (FileItem item : items) {
                         if (!item.isFormField()) {
-                            String fileName = new File(item.getName()).getName();
-                            String filePath = savePath;
-                            File storeFile = new File(filePath);
 
-                            System.out.println(filePath);
+                            String fileName = new File(item.getName()).getName();
+                            String filePath = "/home/kehan/android-workspace/PictureMasterServer/models/CartoonGAN-Test-Pytorch-Torch/test_img" + File.separator + fileName;
+                            File storeFile = new File(filePath);
                             item.write(storeFile);
-                            request.setAttribute("message", "Successfully");
+                            ExecState execState = AiPictureConvertor.runCartoonGANHayao();
+
+                            request.setAttribute("message", execState.toString());
                         }
                     }
                 }

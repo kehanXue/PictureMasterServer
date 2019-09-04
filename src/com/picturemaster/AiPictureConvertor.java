@@ -19,7 +19,8 @@ public class AiPictureConvertor {
 
     public static ExecState runESRGAN() {
         try {
-            String[] cmd = {"/bin/zsh", "-c", System.getProperty("user.dir") + "/scripts/esrgan.sh"};
+            // TODO relative path
+            String[] cmd = {"/bin/zsh", "-c", "/home/kehan/android-workspace/PictureMasterServer/scripts/esrgan.sh"};
             callShell(cmd);
 
             return ExecState.SUCCESS;
@@ -33,7 +34,9 @@ public class AiPictureConvertor {
 
     public static ExecState runCartoonGANHayao() {
         try {
-            String[] cmd = {"/bin/zsh", "-c", System.getProperty("user.dir") + "/scripts/cartoongan_hayao.sh"};
+            // TODO
+            String[] cmd = {"/bin/zsh", "-c", "/home/kehan/android-workspace/PictureMasterServer/scripts/cartoongan_hayao.sh"};
+            System.out.println(System.getProperty("user.dir"));
             callShell(cmd);
 
             return ExecState.SUCCESS;
@@ -47,7 +50,7 @@ public class AiPictureConvertor {
 
     public static ExecState runCartoonGANHosoda() {
         try {
-            String[] cmd = {"/bin/zsh", "-c", System.getProperty("user.dir") + "/scripts/cartoongan_hosoda.sh"};
+            String[] cmd = {"/bin/zsh", "-c", "/home/kehan/android-workspace/PictureMasterServer/scripts/cartoongan_hosoda.sh"};
             callShell(cmd);
 
             return ExecState.SUCCESS;
