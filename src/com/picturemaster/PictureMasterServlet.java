@@ -114,6 +114,7 @@ public class PictureMasterServlet extends HttpServlet {
                                 request.setAttribute("message", "Wrong Input Convert Type");
                             }
                             request.setAttribute("message", execState.toString());
+                            System.out.println("Run complete!");
                         }
                     }
                 }
