@@ -59,6 +59,19 @@ public class PictureMasterServlet extends HttpServlet {
 
                 if (items != null && items.size() > 0) {
 
+                    int cnt = 0;
+                    for (FileItem item : items) {
+
+                        System.out.println("Item count: " + cnt);
+                        cnt++;
+                        if (item.isFormField()) {
+                            System.out.println(item.getFieldName());
+                            System.out.println(item.getString());
+                        } else {
+                            System.out.println(item.getName());
+                        }
+                    }
+
                     String convert_type = new String("");
                     for (FileItem item : items) {
 
@@ -82,6 +95,7 @@ public class PictureMasterServlet extends HttpServlet {
                                     execState = AiPictureConvertor.runESRGAN(item);
                                 }
                                 if (convert_type.equals("CartoonGAN_Hayao")) {
+                                    System.out.println("Get in Hayao");
                                     execState = AiPictureConvertor.runCartoonGANHayao(item);
                                 }
                                 if (convert_type.equals("CartoonGAN_Hosoda")) {
@@ -90,6 +104,7 @@ public class PictureMasterServlet extends HttpServlet {
                                 request.setAttribute("message", execState.toString());
                             } else {
 
+                                System.out.println("Wrong Input Convert Type");
                                 request.setAttribute("message", "Wrong Input Convert Type");
                             }
                         }

@@ -7,3 +7,6 @@
 [submodule "apache-tomcat-9.0.24"]
 	path = apache-tomcat-9.0.24
 	url = git@github.com:kehanXue/PictureMasterServer-Apache-Tomcat.git
+[submodule "models/pytorch-CycleGAN-and-pix2pix"]
+	path = models/pytorch-CycleGAN-and-pix2pix
+	url = git@github.com:kehanXue/pytorch-CycleGAN-and-pix2pix.git

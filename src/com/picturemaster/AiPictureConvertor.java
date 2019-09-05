@@ -7,6 +7,7 @@ import java.io.File;
 
 public class AiPictureConvertor {
 
+    // TODO relative path
     private static final String STORE_FILE_PATH =
             "/home/kehan/android-workspace/PictureMasterServer/apache-tomcat-9.0.24/webapps/PictureMasterServer_war/input_imgs";
 
@@ -23,7 +24,7 @@ public class AiPictureConvertor {
             "/home/kehan/android-workspace/PictureMasterServer/scripts/cartoongan_hosoda.sh";
 
 
-    private static void callShell(String[] shellCommand) {
+    private static int callShell(String[] shellCommand) {
 
         try {
             Process process = Runtime.getRuntime().exec(shellCommand);
@@ -32,22 +33,31 @@ public class AiPictureConvertor {
             if (0 != exitValue) {
                 System.out.println("Runtime.getRuntime().exec() return code: " + exitValue);
             }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
 
+            return exitValue;
+
+        } catch (Throwable e) {
+
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     public static ExecState runCleanOldImgs() {
 
         try {
 
-            // TODO relative path
             String[] cmd = {"/bin/zsh", "-c", CLEAN_INPUT_IMG_DIR_SCRIPT_PATH};
-            callShell(cmd);
 
-            // TODO!
-            return ExecState.SUCCESS;
+
+            if (0 == callShell(cmd)) {
+                System.out.println("Call clean shell above.");
+                return ExecState.SUCCESS;
+            } else {
+                System.out.println("Call clean shell above.");
+                return ExecState.FAILED;
+            }
+
 
         } catch (Exception ex) {
 
@@ -61,18 +71,21 @@ public class AiPictureConvertor {
     public static ExecState runESRGAN(@NotNull FileItem uploadedItem) {
 
         String uploadedFileName = new File(uploadedItem.getName()).getName();
-        // TODO relative path
+
         String storeFilePath = STORE_FILE_PATH + File.separator + uploadedFileName;
         File storeFile = new File(storeFilePath);
 
         try {
             uploadedItem.write(storeFile);
 
-            // TODO relative path
             String[] cmd = {"/bin/zsh", "-c", ESRGAN_SCRIPT_PATH};
-            callShell(cmd);
+            if (0 == callShell(cmd)) {
 
-            return ExecState.SUCCESS;
+                return ExecState.SUCCESS;
+            } else {
+
+                return ExecState.FAILED;
+            }
 
         } catch (Exception ex) {
 
@@ -84,18 +97,23 @@ public class AiPictureConvertor {
     public static ExecState runCartoonGANHayao(@NotNull FileItem uploadedItem) {
 
         String uploadedFileName = new File(uploadedItem.getName()).getName();
-        // TODO relative path
+
         String storeFilePath = STORE_FILE_PATH + File.separator + uploadedFileName;
+        System.out.println("Store File Path: " + storeFilePath);
         File storeFile = new File(storeFilePath);
 
         try {
             uploadedItem.write(storeFile);
 
-            // TODO relative path
-            String[] cmd = {"/bin/zsh", "-c", CARTOONGAN_HAYAO_SCRIPT_PATH};
-            callShell(cmd);
 
-            return ExecState.SUCCESS;
+            String[] cmd = {"/bin/zsh", "-c", CARTOONGAN_HAYAO_SCRIPT_PATH};
+            if (0 == callShell(cmd)) {
+
+                return ExecState.SUCCESS;
+            } else {
+
+                return ExecState.FAILED;
+            }
 
         } catch (Exception ex) {
 
@@ -108,7 +126,7 @@ public class AiPictureConvertor {
     public static ExecState runCartoonGANHosoda(@NotNull FileItem uploadedItem) {
 
         String uploadedFileName = new File(uploadedItem.getName()).getName();
-        // TODO relative path
+
         String storeFilePath = STORE_FILE_PATH + File.separator + uploadedFileName;
         File storeFile = new File(storeFilePath);
 
@@ -116,9 +134,13 @@ public class AiPictureConvertor {
             uploadedItem.write(storeFile);
 
             String[] cmd = {"/bin/zsh", "-c", CARTOONGAN_HOSODA_SCRIPT_PATH};
-            callShell(cmd);
+            if (0 == callShell(cmd)) {
 
-            return ExecState.SUCCESS;
+                return ExecState.SUCCESS;
+            } else {
+
+                return ExecState.FAILED;
+            }
 
         } catch (Exception ex) {
 
