@@ -87,26 +87,33 @@ public class PictureMasterServlet extends HttpServlet {
                         if (!item.isFormField()) {
 
                             ExecState execState = ExecState.START;
-                            if (convert_type.equals("ESRGAN") ||
-                                    convert_type.equals("CartoonGAN_Hayao") ||
-                                    convert_type.equals("CartoonGAN_Hosoda")) {
 
-                                if (convert_type.equals("ESRGAN")) {
-                                    execState = AiPictureConvertor.runESRGAN(item);
-                                }
-                                if (convert_type.equals("CartoonGAN_Hayao")) {
-                                    System.out.println("Get in Hayao");
-                                    execState = AiPictureConvertor.runCartoonGANHayao(item);
-                                }
-                                if (convert_type.equals("CartoonGAN_Hosoda")) {
-                                    execState = AiPictureConvertor.runCartoonGANHosoda(item);
-                                }
-                                request.setAttribute("message", execState.toString());
-                            } else {
-
+                            if (convert_type.equals(AiConvertMethod.ESRGAN.toString())) {
+                                execState = AiPictureConvertor.convert(item, AiConvertMethod.ESRGAN);
+                            }
+                            else if (convert_type.equals(AiConvertMethod.CartoonGAN_Hayao.toString())) {
+                                execState = AiPictureConvertor.convert(item, AiConvertMethod.CartoonGAN_Hayao);
+                            }
+                            else if (convert_type.equals(AiConvertMethod.CartoonGAN_Hosoda.toString())) {
+                                execState = AiPictureConvertor.convert(item, AiConvertMethod.CartoonGAN_Hosoda);
+                            }
+                            else if (convert_type.equals(AiConvertMethod.CycleGAN_Cezanne.toString())) {
+                                execState = AiPictureConvertor.convert(item, AiConvertMethod.CycleGAN_Cezanne);
+                            }
+                            else if (convert_type.equals(AiConvertMethod.CycleGAN_Monet.toString())) {
+                                execState = AiPictureConvertor.convert(item, AiConvertMethod.CycleGAN_Monet);
+                            }
+                            else if (convert_type.equals(AiConvertMethod.CycleGAN_Ukiyoe.toString())) {
+                                execState = AiPictureConvertor.convert(item, AiConvertMethod.CycleGAN_Ukiyoe);
+                            }
+                            else if (convert_type.equals(AiConvertMethod.CycleGAN_Vangogh.toString())) {
+                                execState = AiPictureConvertor.convert(item, AiConvertMethod.CycleGAN_Vangogh);
+                            }
+                            else {
                                 System.out.println("Wrong Input Convert Type");
                                 request.setAttribute("message", "Wrong Input Convert Type");
                             }
+                            request.setAttribute("message", execState.toString());
                         }
                     }
                 }
